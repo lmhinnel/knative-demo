@@ -3,14 +3,14 @@
 > - https://kind.sigs.k8s.io/docs/user/quick-start/
 > - https://github.com/kubernetes-sigs/cloud-provider-kind?tab=readme-ov-file#install
 
-# 1. Kind cluster + cloud-provider-kind + kafka cluster
+# 1. Kind cluster + cloud-provider-kind
 
 ```bash
 kind create cluster --config kind-config.yaml
 cloud-provider-kind
 ```
 
-# 2. Knative eventing + Networking layer (Kourier) + DNS configuration
+# 2. Knative eventing
 
 ```bash
 k apply -f https://github.com/knative/eventing/releases/download/knative-v1.19.0/eventing-crds.yaml
