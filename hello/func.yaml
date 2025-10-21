@@ -1,0 +1,6 @@
+# $schema: https://raw.githubusercontent.com/knative/func/d04ff0a3/schema/func_yaml-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/knative/func/d04ff0a3/schema/func_yaml-schema.json
+specVersion: 0.36.0
+name: hello
+runtime: go
+created: 2025-10-21T15:11:00.417441815+07:00
