@@ -34,7 +34,7 @@ spec:
   subject:
     apiVersion: serving.knative.dev/v1
     kind: Service
-    name: cloudevents-player
+    name: cloudevents-player-2
 ---
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
@@ -51,4 +51,4 @@ spec:
     ref:
       apiVersion: serving.knative.dev/v1
       kind: Service
-      name: cloudevents-player
+      name: cloudevents-player-2
