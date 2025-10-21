@@ -36,26 +36,25 @@ k apply -f https://github.com/knative/serving/releases/download/knative-v1.19.0/
 # 3. Verify installation
 
 ```bash
-k get pods -n knative-serving
+k get pods -n knative-serving -w
 ```
 
 # 4. Sample
 
 ```bash
 k apply -f ./sample/knative-hello-1.yaml
-
 k get routes.serving.knative.dev -Aw
-
 curl "$(kn service describe hello -o url)"
 
 k apply -f ./sample/knative-hello-2.yaml
-
 curl "$(kn service describe hello -o url)"
 
 k apply -f ./sample/knative-hello-3.yaml
-
 ./sample/knative-serving.sh
 
+# check mate
+k get revisions.serving.knative.dev -A
+k get routes.serving.knative.dev -A
 ```
 
 # 5. Clean up

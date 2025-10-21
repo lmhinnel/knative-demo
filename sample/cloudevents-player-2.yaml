@@ -1,0 +1,54 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cloudevents-player-2
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/min-scale: "1"
+    spec:
+      containers:
+        - image: quay.io/ruben/cloudevents-player:v1.3
+          env:
+            - name: BROKER_URI
+              value: "http://broker-ingress.knative-eventing.svc.cluster.local/default/filter-broker"
+---
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+  annotations:
+    eventing.knative.dev/broker.class: MTChannelBasedBroker
+  name: filter-broker
+---
+apiVersion: sources.knative.dev/v1
+kind: SinkBinding
+metadata:
+  name: ce-filter-binding
+spec:
+  sink:
+    ref:
+      apiVersion: eventing.knative.dev/v1
+      kind: Broker
+      name: filter-broker
+  subject:
+    apiVersion: serving.knative.dev/v1
+    kind: Service
+    name: cloudevents-player
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: cloudevents-player-filter
+  annotations:
+    knative-eventing-injection: enabled
+spec:
+  broker: filter-broker
+  filter:
+    attributes:
+      type: cloudevents.meo
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: cloudevents-player
