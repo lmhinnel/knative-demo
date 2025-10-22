@@ -18,3 +18,9 @@ then
 ```bash
 k create clusterrolebinding default:knative-serving-namespaced-admin --clusterrole=knative-serving-namespaced-admin  --serviceaccount=default:default
 ```
+
+# 3. Knative Function Demo
+
+```bash
+FUNC_REGISTRY=docker.io/lmhinnel func deploy --remote -p hello --verbose
+```

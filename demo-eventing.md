@@ -55,5 +55,12 @@ k get triggers.eventing.knative.dev -A
 
 NAMESPACE   NAME                        BROKER           SUBSCRIBER_URI                                        AGE   READY   REASON
 default     cloudevents-player-filter   filter-broker    http://cloudevents-player.default.svc.cluster.local   36s   True    
-default     cloudevents-trigger         example-broker   http://cloudevents-player.default.svc.cluster.local   14m   True 
+default     cloudevents-trigger         example-broker   http://cloudevents-player.default.svc.cluster.local   14m   True
+```
+
+- **extra demo ping**
+
+```bash
+k apply -f ./sample/ping-demo.yaml
+k logs -n ping-demo -l app=event-display -f
 ```
