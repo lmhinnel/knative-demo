@@ -1,0 +1,88 @@
+# create namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apiserver-demo
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-display
+  namespace: apiserver-demo
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: event-display-role
+  namespace: apiserver-demo
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: event-display-role-binding
+  namespace: apiserver-demo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: event-display-role
+subjects:
+- kind: ServiceAccount
+  name: event-display
+  namespace: apiserver-demo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-display
+  namespace: apiserver-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: &labels
+      app: event-display
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+        - name: event-display
+          image: gcr.io/knative-releases/knative.dev/eventing/cmd/event_display
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: event-display
+  namespace: apiserver-demo
+spec:
+  selector:
+    app: event-display
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+---
+apiVersion: sources.knative.dev/v1
+kind: ApiServerSource
+metadata:
+ name: apiserversource-event-display
+ namespace: apiserver-demo
+spec:
+ serviceAccountName: event-display
+ mode: Reference
+ resources:
+   - apiVersion: v1
+     kind: Event
+ sink:
+   ref:
+     apiVersion: v1
+     kind: Service
+     name: event-display

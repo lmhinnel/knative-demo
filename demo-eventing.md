@@ -58,9 +58,26 @@ default     cloudevents-player-filter   filter-broker    http://cloudevents-play
 default     cloudevents-trigger         example-broker   http://cloudevents-player.default.svc.cluster.local   14m   True
 ```
 
-- **extra demo ping**
+- ping source
 
 ```bash
 k apply -f ./sample/ping-demo.yaml
 k logs -n ping-demo -l app=event-display -f
+```
+
+- s3 source (minio)
+
+```bash
+helm repo add minio https://charts.min.io/
+helm repo update minio
+helm upgrade --install minio minio/minio --namespace minio --create-namespace --values ./sample/minio-values.yaml --version 5.0.10
+k apply -f ./sample/minio-demo.yaml
+k logs -n s3-demo -l app=event-display -f
+```
+
+- apiserver source
+
+```bash
+k apply -f ./sample/apiserver-demo.yaml
+k logs -n apiserver-demo -l app=event-display -f
 ```

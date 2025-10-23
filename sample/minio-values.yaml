@@ -1,0 +1,21 @@
+resources:
+  requests:
+    memory: 512Mi
+replicas: 1
+persistence:
+  enabled: false
+mode: standalone
+rootUser: minio123
+rootPassword: minio123
+environment:
+  MINIO_REGION: eu-central-1
+svcaccts:
+  - accessKey: minio123
+    secretKey: minio123
+    user: console
+    policy:
+      statements:
+        - resources:
+            - 'arn:aws:s3:::*/*'
+          actions:
+            - "s3:*"
