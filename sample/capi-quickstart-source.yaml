@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: capi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: event-display
+  namespace: capi
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: event-display-role
+  namespace: capi
+rules:
+- apiGroups:
+  - "*"
+  resources:
+  - "*"
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: event-display-role-binding
+  namespace: capi
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: event-display-role
+subjects:
+- kind: ServiceAccount
+  name: event-display
+  namespace: capi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-display
+  namespace: capi
+spec:
+  replicas: 1
+  selector:
+    matchLabels: &labels
+      app: event-display
+  template:
+    metadata:
+      labels: *labels
+    spec:
+      containers:
+        - name: event-display
+          image: gcr.io/knative-releases/knative.dev/eventing/cmd/event_display
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: event-display
+  namespace: capi
+spec:
+  selector:
+    app: event-display
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+---
+apiVersion: sources.knative.dev/v1
+kind: ApiServerSource
+metadata:
+ name: event-display
+ namespace: capi
+spec:
+ serviceAccountName: event-display
+ mode: Reference
+ resources:
+  - apiVersion: v1
+    kind: Event
+  - apiVersion: cluster.x-k8s.io/v1beta2
+    kind: Cluster
+  - apiVersion: cluster.x-k8s.io/v1beta2
+    kind: Machine
+  - apiVersion: v1
+    kind: Pod
+ sink:
+   ref:
+     apiVersion: v1
+     kind: Service
+     name: event-display

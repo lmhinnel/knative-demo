@@ -75,9 +75,11 @@ k apply -f ./sample/minio-demo.yaml
 k logs -n s3-demo -l app=event-display -f
 ```
 
-- apiserver source
+- apiserver source + capi
 
 ```bash
-k apply -f ./sample/apiserver-demo.yaml
-k logs -n apiserver-demo -l app=event-display -f
+# installed clusterctl + --infra docker
+k apply -f ./sample/capi-quickstart-source.yaml
+k apply -f ./sample/capi-quickstart.yaml
+k logs -n capi -l app=event-display -f
 ```
