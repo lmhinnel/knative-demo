@@ -1,3 +1,5 @@
+- ref: https://github.com/lmhinnel/knative-docs/tree/main/code-samples/eventing/bookstore-sample-app
+
 ```
 ./kind-config.sh
 kubectl apply -f frontend/config/
@@ -8,7 +10,11 @@ func deploy -b=s2i -v -p bad-word-filter
 k apply -f db-service
 # kubectl apply -n camel-k -f https://raw.githubusercontent.com/apache/camel-kamelets/main/kamelets/slack-sink.kamelet.yaml
 k apply -f slack-sink
+
+# cur project
 k apply -f ./sample/strimzi.yaml
 k apply -f ./sample/kafka.yaml
+
+k apply -f debezium.yaml
 
 ```
