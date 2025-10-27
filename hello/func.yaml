@@ -3,4 +3,11 @@
 specVersion: 0.36.0
 name: hello
 runtime: go
+registry: docker.io/lmhinnel
+namespace: default
 created: 2025-10-21T15:11:00.417441815+07:00
+build:
+  builder: pack
+deploy:
+  namespace: default
+  image: index.docker.io/lmhinnel/hello:latest

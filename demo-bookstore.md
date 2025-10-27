@@ -18,3 +18,7 @@ k apply -f ./sample/kafka.yaml
 k apply -f debezium.yaml
 
 ```
+
+- [db-changes-log](./output/event-display-kafka-64f5498b98-j8ng6.log)
+- [slack-notif](./output/image.png)
+- [frontend app](./output/image-1.png)
